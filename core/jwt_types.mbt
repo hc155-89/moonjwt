@@ -1,4 +1,35 @@
 ///|
+/// JWT signing algorithms supported by moonjwt.
+///
+/// The `alg` header of every JWT must be one of these values. Unsupported
+/// algorithms are rejected explicitly instead of falling back to `none`,
+/// which prevents the classic algorithm-confusion attack.
+pub(all) enum Algorithm {
+  HS256
+  RS256
+}
+
+///|
+/// Returns the JOSE identifier of an algorithm, as registered by RFC 7518.
+pub fn Algorithm::name(self : Algorithm) -> String {
+  match self {
+    HS256 => "HS256"
+    RS256 => "RS256"
+  }
+}
+
+///|
+/// Parses a JOSE algorithm identifier. Returns `None` for algorithms that
+/// moonjwt does not implement.
+pub fn Algorithm::from_name(name : String) -> Algorithm? {
+  match name {
+    "HS256" => Some(HS256)
+    "RS256" => Some(RS256)
+    _ => None
+  }
+}
+
+///|
 /// Decoded JOSE header (RFC 7515 §4.1).
 ///
 /// Only the fields moonjwt understands are surfaced; unknown header
@@ -7,6 +38,24 @@ pub struct Header {
   alg : Algorithm
   typ : String
   kid : String?
+}
+
+///|
+/// Returns the algorithm declared by the header.
+pub fn Header::algorithm(self : Header) -> Algorithm {
+  self.alg
+}
+
+///|
+/// Returns the media type declared by the header (`typ`).
+pub fn Header::media_type(self : Header) -> String {
+  self.typ
+}
+
+///|
+/// Returns the key identifier when the token carries one.
+pub fn Header::key_id(self : Header) -> String? {
+  self.kid
 }
 
 ///|

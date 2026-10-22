@@ -8,4 +8,6 @@ pub(all) suberror JwtError {
   InvalidJson(String)
   InvalidHeader(String)
   UnsupportedAlgorithm(String)
+  InvalidToken(String)
+  InvalidSignature
 }

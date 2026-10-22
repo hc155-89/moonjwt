@@ -2,13 +2,27 @@
 package "hc155-89/moonjwt/core"
 
 // Values
+pub fn decode(StringView, StringView) -> DecodedJwt raise JwtError
+
 pub fn decode_base64url(StringView) -> Bytes raise JwtError
 
 pub fn decode_base64url_text(StringView) -> String raise JwtError
 
+pub fn decode_with_key(StringView, BytesView) -> DecodedJwt raise JwtError
+
+pub fn encode(Payload, StringView) -> String raise JwtError
+
 pub fn encode_base64url(BytesView) -> String
 
 pub fn encode_base64url_text(StringView) -> String
+
+pub fn encode_with_header(Payload, Header, BytesView) -> String raise JwtError
+
+pub fn encode_with_key(Payload, BytesView) -> String raise JwtError
+
+pub fn hmac_sha256(BytesView, BytesView) -> Bytes
+
+pub fn sha256(BytesView) -> Bytes
 
 // Errors
 pub(all) suberror JwtError {
@@ -16,22 +30,34 @@ pub(all) suberror JwtError {
   InvalidJson(String)
   InvalidHeader(String)
   UnsupportedAlgorithm(String)
+  InvalidToken(String)
+  InvalidSignature
 }
 
 // Types and methods
-pub enum Algorithm {
+pub(all) enum Algorithm {
   HS256
   RS256
 }
 pub fn Algorithm::from_name(String) -> Self?
 pub fn Algorithm::name(Self) -> String
 
+pub struct DecodedJwt {
+  header : Header
+  payload : Payload
+}
+pub fn DecodedJwt::header(Self) -> Header
+pub fn DecodedJwt::payload(Self) -> Payload
+
 pub struct Header {
   alg : Algorithm
   typ : String
   kid : String?
 }
+pub fn Header::algorithm(Self) -> Algorithm
 pub fn Header::from_json(Json) -> Self raise JwtError
+pub fn Header::key_id(Self) -> String?
+pub fn Header::media_type(Self) -> String
 pub fn Header::new(Algorithm) -> Self
 pub fn Header::to_json(Self) -> Json
 pub fn Header::with_kid(Self, String) -> Self
