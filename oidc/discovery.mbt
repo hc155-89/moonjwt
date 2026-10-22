@@ -151,6 +151,30 @@ pub fn ProviderMetadata::signing_algorithms(
 }
 
 ///|
+/// Builds an OAuth2 client configuration from the discovered endpoints.
+///
+/// The discovery document is the source of truth for endpoint URLs, so wiring a
+/// client manually is both redundant and easy to get wrong. The secret is left
+/// unset; call `with_client_secret` when the client is confidential.
+pub fn ProviderMetadata::oauth2_config(
+  self : ProviderMetadata,
+  client_id : StringView,
+  redirect_uri : StringView,
+) -> @oauth2.OAuth2Config raise OidcError {
+  @oauth2.OAuth2Config::new(
+    self.authorization_endpoint,
+    self.token_endpoint,
+    client_id,
+    redirect_uri,
+  ) catch {
+    _ =>
+      raise InvalidConfiguration(
+        "discovery endpoints cannot form an OAuth2 client",
+      )
+  }
+}
+
+///|
 /// Removes trailing slashes so a configured issuer cannot produce `//` in the
 /// discovery URL.
 fn strip_trailing_slashes(value : StringView) -> String {

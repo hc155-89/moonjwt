@@ -291,6 +291,28 @@ test "oidc: hs256 token cannot pass rsa verification" {
 }
 
 ///|
+test "oidc: discovery metadata builds an oauth2 client configuration" {
+  let text =
+    #|{"issuer":"https://auth.example.com","authorization_endpoint":"https://auth.example.com/authorize","token_endpoint":"https://auth.example.com/token","jwks_uri":"https://auth.example.com/jwks"}
+  let metadata = ProviderMetadata::from_json(
+    @json.parse(text) catch {
+      _ => panic()
+    },
+  ) catch {
+    _ => panic()
+  }
+  let config = metadata.oauth2_config(
+    TEST_AUDIENCE,
+    "https://app.example.com/callback",
+  ) catch {
+    _ => panic()
+  }
+  assert_eq(config.authorization_endpoint(), metadata.authorization_endpoint())
+  assert_eq(config.token_endpoint(), metadata.token_endpoint())
+  assert_eq(config.client_secret(), None)
+}
+
+///|
 test "oidc: several audiences require a matching azp" {
   let claims = base_claims()
   claims[1] = (

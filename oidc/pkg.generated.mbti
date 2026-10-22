@@ -3,6 +3,7 @@ package "hc155-89/moonjwt/oidc"
 
 import {
   "hc155-89/moonjwt/core",
+  "hc155-89/moonjwt/oauth2",
 }
 
 // Values
@@ -77,6 +78,7 @@ pub fn ProviderMetadata::discovery_url(StringView) -> String raise OidcError
 pub fn ProviderMetadata::from_json(Json) -> Self raise OidcError
 pub fn ProviderMetadata::issuer(Self) -> String
 pub fn ProviderMetadata::jwks_uri(Self) -> String
+pub fn ProviderMetadata::oauth2_config(Self, StringView, StringView) -> @oauth2.OAuth2Config raise OidcError
 pub fn ProviderMetadata::response_types_supported(Self) -> Array[String]
 pub fn ProviderMetadata::scopes_supported(Self) -> Array[String]
 pub fn ProviderMetadata::signing_algorithms(Self) -> Array[String]

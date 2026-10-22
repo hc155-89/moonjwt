@@ -2,5 +2,6 @@
 
 import {
   "hc155-89/moonjwt/core",
+  "hc155-89/moonjwt/oauth2",
   "moonbitlang/core/json",
 }
