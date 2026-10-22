@@ -2,17 +2,90 @@
 package "hc155-89/moonjwt/oauth2"
 
 // Values
+pub fn code_challenge_s256(StringView) -> String raise OAuth2Error
 
 // Errors
+pub(all) suberror OAuth2Error {
+  InvalidConfiguration(String)
+  InvalidRequest(String)
+  InvalidResponse(String)
+}
 
 // Types and methods
-pub enum GrantType {
+pub struct AuthCodeOptions {
+  state : String
+  nonce : String?
+  scopes : Array[String]
+  pkce : Pkce?
+  extra_parameters : Array[(String, String)]
+}
+pub fn AuthCodeOptions::new(StringView) -> Self raise OAuth2Error
+pub fn AuthCodeOptions::nonce(Self) -> String?
+pub fn AuthCodeOptions::pkce(Self) -> Pkce?
+pub fn AuthCodeOptions::state(Self) -> String
+pub fn AuthCodeOptions::with_nonce(Self, StringView) -> Self raise OAuth2Error
+pub fn AuthCodeOptions::with_parameter(Self, StringView, StringView) -> Self raise OAuth2Error
+pub fn AuthCodeOptions::with_pkce(Self, Pkce) -> Self
+pub fn AuthCodeOptions::with_scopes(Self, Array[String]) -> Self
+
+pub(all) enum GrantType {
   AuthorizationCode
   ClientCredentials
   RefreshToken
 }
 pub fn GrantType::all() -> Array[Self]
 pub fn GrantType::value(Self) -> String
+
+pub struct OAuth2Config {
+  authorization_endpoint : String
+  token_endpoint : String
+  client_id : String
+  client_secret : String?
+  redirect_uri : String
+  scopes : Array[String]
+}
+pub fn OAuth2Config::authorization_endpoint(Self) -> String
+pub fn OAuth2Config::authorization_url(Self, AuthCodeOptions) -> String
+pub fn OAuth2Config::client_id(Self) -> String
+pub fn OAuth2Config::client_secret(Self) -> String?
+pub fn OAuth2Config::new(StringView, StringView, StringView, StringView) -> Self raise OAuth2Error
+pub fn OAuth2Config::redirect_uri(Self) -> String
+pub fn OAuth2Config::scopes(Self) -> Array[String]
+pub fn OAuth2Config::token_endpoint(Self) -> String
+pub fn OAuth2Config::with_client_secret(Self, StringView) -> Self raise OAuth2Error
+pub fn OAuth2Config::with_scopes(Self, Array[String]) -> Self
+
+pub struct Pkce {
+  verifier : String
+  challenge : String
+  transformation : PkceMethod
+}
+pub fn Pkce::challenge(Self) -> String
+pub fn Pkce::from_entropy(BytesView) -> Self raise OAuth2Error
+pub fn Pkce::from_verifier(StringView) -> Self raise OAuth2Error
+pub fn Pkce::transformation(Self) -> PkceMethod
+pub fn Pkce::verifier(Self) -> String
+
+pub(all) enum PkceMethod {
+  S256
+}
+pub fn PkceMethod::value(Self) -> String
+
+pub struct Token {
+  access_token : String
+  token_type : String
+  expires_in : Int64?
+  refresh_token : String?
+  scope : String?
+  id_token : String?
+}
+pub fn Token::access_token(Self) -> String
+pub fn Token::expires_in(Self) -> Int64?
+pub fn Token::from_json(Json) -> Self raise OAuth2Error
+pub fn Token::id_token(Self) -> String?
+pub fn Token::refresh_token(Self) -> String?
+pub fn Token::scope(Self) -> String?
+pub fn Token::token_type(Self) -> String
 
 // Type aliases
 

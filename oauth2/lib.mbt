@@ -1,6 +1,6 @@
 ///|
 /// OAuth2 grant types supported by the MVP client.
-pub enum GrantType {
+pub(all) enum GrantType {
   AuthorizationCode
   ClientCredentials
   RefreshToken

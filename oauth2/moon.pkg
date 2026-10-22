@@ -1,1 +1,6 @@
 // OAuth2 client flows: authorization code + PKCE and token exchange.
+
+import {
+  "hc155-89/moonjwt/core",
+  "moonbitlang/core/encoding/utf8",
+}
