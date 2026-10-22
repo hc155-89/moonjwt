@@ -1,0 +1,15 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "hc155-89/moonjwt/oidc"
+
+// Values
+pub let default_jwks_path : String
+
+pub let discovery_path : String
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits

@@ -1,0 +1,19 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "hc155-89/moonjwt/oauth2"
+
+// Values
+
+// Errors
+
+// Types and methods
+pub enum GrantType {
+  AuthorizationCode
+  ClientCredentials
+  RefreshToken
+}
+pub fn GrantType::all() -> Array[Self]
+pub fn GrantType::value(Self) -> String
+
+// Type aliases
+
+// Traits

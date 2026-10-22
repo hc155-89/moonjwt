@@ -1,0 +1,18 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "hc155-89/moonjwt/core"
+
+// Values
+
+// Errors
+
+// Types and methods
+pub enum Algorithm {
+  HS256
+  RS256
+}
+pub fn Algorithm::from_name(String) -> Self?
+pub fn Algorithm::name(Self) -> String
+
+// Type aliases
+
+// Traits
