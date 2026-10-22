@@ -3,7 +3,7 @@ name = "hc155-89/moonjwt"
 
 version = "0.1.0"
 
-readme = "README.mbt.md"
+readme = "README.md"
 
 repository = "https://github.com/hc155-89/moonjwt"
 
