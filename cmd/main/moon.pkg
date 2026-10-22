@@ -1,1 +1,10 @@
+// Runnable demo for the moonjwt library.
+
+import {
+  "hc155-89/moonjwt/core",
+  "hc155-89/moonjwt/oauth2",
+  "hc155-89/moonjwt/oidc",
+  "moonbitlang/core/json",
+}
+
 pkgtype(kind: "executable")
