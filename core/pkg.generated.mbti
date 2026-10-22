@@ -1,12 +1,18 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "hc155-89/moonjwt/core"
 
+import {
+  "moonbitlang/core/bigint",
+}
+
 // Values
 pub fn decode(StringView, StringView) -> DecodedJwt raise JwtError
 
 pub fn decode_base64url(StringView) -> Bytes raise JwtError
 
 pub fn decode_base64url_text(StringView) -> String raise JwtError
+
+pub fn decode_rs256(StringView, StringView) -> DecodedJwt raise JwtError
 
 pub fn decode_with_key(StringView, BytesView) -> DecodedJwt raise JwtError
 
@@ -15,6 +21,10 @@ pub fn encode(Payload, StringView) -> String raise JwtError
 pub fn encode_base64url(BytesView) -> String
 
 pub fn encode_base64url_text(StringView) -> String
+
+pub fn encode_rs256(Payload, StringView) -> String raise JwtError
+
+pub fn encode_rs256_with_header(Payload, Header, StringView) -> String raise JwtError
 
 pub fn encode_with_header(Payload, Header, BytesView) -> String raise JwtError
 
@@ -32,6 +42,7 @@ pub(all) suberror JwtError {
   UnsupportedAlgorithm(String)
   InvalidToken(String)
   InvalidSignature
+  InvalidKey(String)
 }
 
 // Types and methods
@@ -72,6 +83,26 @@ pub fn Payload::length(Self) -> Int32
 pub fn Payload::new() -> Self
 pub fn Payload::set(Self, String, Json) -> Unit
 pub fn Payload::to_json(Self) -> Json
+
+pub struct RsaPrivateKey {
+  modulus : @bigint.BigInt
+  exponent : @bigint.BigInt
+  private_exponent : @bigint.BigInt
+  size_bytes : Int32
+}
+pub fn RsaPrivateKey::from_pem(StringView) -> Self raise JwtError
+pub fn RsaPrivateKey::modulus_bits(Self) -> Int32
+pub fn RsaPrivateKey::public_key(Self) -> RsaPublicKey
+pub fn RsaPrivateKey::sign_sha256(Self, BytesView) -> Bytes
+
+pub struct RsaPublicKey {
+  modulus : @bigint.BigInt
+  exponent : @bigint.BigInt
+  size_bytes : Int32
+}
+pub fn RsaPublicKey::from_pem(StringView) -> Self raise JwtError
+pub fn RsaPublicKey::modulus_bits(Self) -> Int32
+pub fn RsaPublicKey::verify_sha256(Self, BytesView, BytesView) -> Bool
 
 // Type aliases
 

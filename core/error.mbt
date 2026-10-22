@@ -10,4 +10,5 @@ pub(all) suberror JwtError {
   UnsupportedAlgorithm(String)
   InvalidToken(String)
   InvalidSignature
+  InvalidKey(String)
 }

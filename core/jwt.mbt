@@ -120,3 +120,65 @@ pub fn decode_with_key(
   let payload = Payload::from_json(parse_json_segment(payload_text))
   { header, payload, }
 }
+
+///|
+/// Signs a payload with RS256 using a PEM-encoded RSA private key.
+pub fn encode_rs256(
+  payload : Payload,
+  private_key_pem : StringView,
+) -> String raise JwtError {
+  encode_rs256_with_header(payload, Header::new(RS256), private_key_pem)
+}
+
+///|
+/// Signs a payload with RS256 and an explicit header.
+///
+/// The header must declare `RS256`; requesting `HS256` here is rejected rather
+/// than silently switching algorithms (RFC 8725 §3.1).
+pub fn encode_rs256_with_header(
+  payload : Payload,
+  header : Header,
+  private_key_pem : StringView,
+) -> String raise JwtError {
+  match header.algorithm() {
+    RS256 => ()
+    HS256 => raise UnsupportedAlgorithm("HS256")
+  }
+  let key = RsaPrivateKey::from_pem(private_key_pem)
+  let header_segment = encode_base64url_text(header.to_json().stringify())
+  let payload_segment = encode_base64url_text(payload.to_json().stringify())
+  let signing_input = header_segment + "." + payload_segment
+  let signature = key.sign_sha256(@utf8.encode(signing_input))
+  signing_input + "." + encode_base64url(signature)
+}
+
+///|
+/// Verifies and decodes a compact JWT with an RS256 PEM public key.
+///
+/// The header must declare `RS256`: a token that claims `HS256` is rejected
+/// before any key material is used, which prevents the classic RS256-to-HS256
+/// confusion attack where the public key is reused as an HMAC secret.
+pub fn decode_rs256(
+  token : StringView,
+  public_key_pem : StringView,
+) -> DecodedJwt raise JwtError {
+  let segments = Array::from_iter(token.split("."))
+  guard segments.length() == 3 else {
+    raise InvalidToken("a compact JWT must contain exactly three segments")
+  }
+  let header_text = decode_base64url_text(segments[0])
+  let header = Header::from_json(parse_json_segment(header_text))
+  match header.algorithm() {
+    RS256 => ()
+    HS256 => raise UnsupportedAlgorithm("HS256")
+  }
+  let key = RsaPublicKey::from_pem(public_key_pem)
+  let signing_input = segments[0].to_owned() + "." + segments[1].to_owned()
+  let signature = decode_base64url(segments[2])
+  if !key.verify_sha256(@utf8.encode(signing_input), signature) {
+    raise InvalidSignature
+  }
+  let payload_text = decode_base64url_text(segments[1])
+  let payload = Payload::from_json(parse_json_segment(payload_text))
+  { header, payload, }
+}
