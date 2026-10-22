@@ -1,1 +1,10 @@
 // Core JWT package: encoding, hashing, signing and verification.
+
+import {
+  "moonbitlang/core/buffer",
+  "moonbitlang/core/encoding/utf8",
+}
+
+import {
+  "moonbitlang/core/json",
+} for "wbtest"

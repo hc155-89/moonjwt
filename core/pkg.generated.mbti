@@ -2,8 +2,21 @@
 package "hc155-89/moonjwt/core"
 
 // Values
+pub fn decode_base64url(StringView) -> Bytes raise JwtError
+
+pub fn decode_base64url_text(StringView) -> String raise JwtError
+
+pub fn encode_base64url(BytesView) -> String
+
+pub fn encode_base64url_text(StringView) -> String
 
 // Errors
+pub(all) suberror JwtError {
+  InvalidBase64Url(String)
+  InvalidJson(String)
+  InvalidHeader(String)
+  UnsupportedAlgorithm(String)
+}
 
 // Types and methods
 pub enum Algorithm {
@@ -12,6 +25,27 @@ pub enum Algorithm {
 }
 pub fn Algorithm::from_name(String) -> Self?
 pub fn Algorithm::name(Self) -> String
+
+pub struct Header {
+  alg : Algorithm
+  typ : String
+  kid : String?
+}
+pub fn Header::from_json(Json) -> Self raise JwtError
+pub fn Header::new(Algorithm) -> Self
+pub fn Header::to_json(Self) -> Json
+pub fn Header::with_kid(Self, String) -> Self
+
+pub struct Payload {
+  claims : Map[String, Json]
+}
+pub fn Payload::contains(Self, String) -> Bool
+pub fn Payload::from_json(Json) -> Self raise JwtError
+pub fn Payload::get(Self, String) -> Json?
+pub fn Payload::length(Self) -> Int32
+pub fn Payload::new() -> Self
+pub fn Payload::set(Self, String, Json) -> Unit
+pub fn Payload::to_json(Self) -> Json
 
 // Type aliases
 
