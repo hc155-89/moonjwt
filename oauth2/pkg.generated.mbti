@@ -58,6 +58,17 @@ pub fn OAuth2Config::token_endpoint(Self) -> String
 pub fn OAuth2Config::with_client_secret(Self, StringView) -> Self raise OAuth2Error
 pub fn OAuth2Config::with_scopes(Self, Array[String]) -> Self
 
+pub struct OAuth2ErrorResponse {
+  error : String
+  description : String?
+  uri : String?
+}
+pub fn OAuth2ErrorResponse::description(Self) -> String?
+pub fn OAuth2ErrorResponse::error(Self) -> String
+pub fn OAuth2ErrorResponse::from_json(Json) -> Self raise OAuth2Error
+pub fn OAuth2ErrorResponse::requires_new_grant(Self) -> Bool
+pub fn OAuth2ErrorResponse::uri(Self) -> String?
+
 pub struct Pkce {
   verifier : String
   challenge : String
