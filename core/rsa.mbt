@@ -274,6 +274,28 @@ fn pem_to_der(pem : StringView) -> Bytes raise JwtError {
 }
 
 ///|
+/// Builds an RSA public key from its big-endian components.
+///
+/// This is the entry point for JWK keys (RFC 7517), whose `n` and `e` members
+/// are base64url-encoded big-endian integers. The same parameter checks as PEM
+/// parsing apply, so a weak JWK is rejected exactly like a weak PEM file.
+pub fn RsaPublicKey::from_components(
+  modulus : BytesView,
+  exponent : BytesView,
+) -> RsaPublicKey raise JwtError {
+  if modulus.length() == 0 {
+    raise InvalidKey("RSA modulus must not be empty")
+  }
+  if exponent.length() == 0 {
+    raise InvalidKey("RSA public exponent must not be empty")
+  }
+  make_public_key(
+    @bigint.BigInt::from_octets(modulus),
+    @bigint.BigInt::from_octets(exponent),
+  )
+}
+
+///|
 /// Parses a PEM-encoded RSA public key.
 ///
 /// Accepts `-----BEGIN PUBLIC KEY-----` (SPKI, the common `openssl rsa -pubout`

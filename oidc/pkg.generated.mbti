@@ -1,14 +1,87 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "hc155-89/moonjwt/oidc"
 
+import {
+  "hc155-89/moonjwt/core",
+}
+
 // Values
 pub let default_jwks_path : String
 
 pub let discovery_path : String
 
+pub fn validate_id_token(StringView, Jwks, IdTokenValidation) -> IdToken raise OidcError
+
 // Errors
+pub(all) suberror OidcError {
+  InvalidConfiguration(String)
+  InvalidResponse(String)
+  InvalidIdToken(String)
+}
 
 // Types and methods
+pub struct IdToken {
+  subject : String
+  payload : @core.Payload
+}
+pub fn IdToken::claim(Self, String) -> Json?
+pub fn IdToken::claims(Self) -> @core.Payload
+pub fn IdToken::subject(Self) -> String
+
+pub struct IdTokenValidation {
+  issuer : String
+  audience : String
+  nonce : String?
+  now_seconds : Int64
+  clock_skew_seconds : Int64
+}
+pub fn IdTokenValidation::new(StringView, StringView, Int64) -> Self raise OidcError
+pub fn IdTokenValidation::with_clock_skew(Self, Int64) -> Self raise OidcError
+pub fn IdTokenValidation::with_nonce(Self, StringView) -> Self raise OidcError
+
+pub struct JwkRsaKey {
+  kid : String?
+  key_use : String?
+  alg : String?
+  modulus : Bytes
+  exponent : Bytes
+}
+pub fn JwkRsaKey::algorithm(Self) -> String?
+pub fn JwkRsaKey::exponent(Self) -> Bytes
+pub fn JwkRsaKey::key_id(Self) -> String?
+pub fn JwkRsaKey::modulus(Self) -> Bytes
+pub fn JwkRsaKey::public_key(Self) -> @core.RsaPublicKey raise OidcError
+pub fn JwkRsaKey::use_case(Self) -> String?
+
+pub struct Jwks {
+  keys : Array[JwkRsaKey]
+}
+pub fn Jwks::from_json(Json) -> Self raise OidcError
+pub fn Jwks::key_by_id(Self, String) -> JwkRsaKey?
+pub fn Jwks::keys(Self) -> Array[JwkRsaKey]
+pub fn Jwks::length(Self) -> Int32
+pub fn Jwks::only_key(Self) -> JwkRsaKey?
+
+pub struct ProviderMetadata {
+  issuer : String
+  authorization_endpoint : String
+  token_endpoint : String
+  jwks_uri : String
+  userinfo_endpoint : String?
+  scopes_supported : Array[String]
+  response_types_supported : Array[String]
+  id_token_signing_alg_values_supported : Array[String]
+}
+pub fn ProviderMetadata::authorization_endpoint(Self) -> String
+pub fn ProviderMetadata::discovery_url(StringView) -> String raise OidcError
+pub fn ProviderMetadata::from_json(Json) -> Self raise OidcError
+pub fn ProviderMetadata::issuer(Self) -> String
+pub fn ProviderMetadata::jwks_uri(Self) -> String
+pub fn ProviderMetadata::response_types_supported(Self) -> Array[String]
+pub fn ProviderMetadata::scopes_supported(Self) -> Array[String]
+pub fn ProviderMetadata::signing_algorithms(Self) -> Array[String]
+pub fn ProviderMetadata::token_endpoint(Self) -> String
+pub fn ProviderMetadata::userinfo_endpoint(Self) -> String?
 
 // Type aliases
 

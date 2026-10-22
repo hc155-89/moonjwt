@@ -162,6 +162,19 @@ pub fn decode_rs256(
   token : StringView,
   public_key_pem : StringView,
 ) -> DecodedJwt raise JwtError {
+  decode_rs256_with_key(token, RsaPublicKey::from_pem(public_key_pem))
+}
+
+///|
+/// Verifies and decodes a compact JWT with an already parsed RSA public key.
+///
+/// This is the entry point for keys that never existed as PEM, such as the JWK
+/// members of an OIDC `jwks_uri` document. Algorithm checks and verification
+/// order are identical to `decode_rs256`, so a JWKS cannot weaken the policy.
+pub fn decode_rs256_with_key(
+  token : StringView,
+  key : RsaPublicKey,
+) -> DecodedJwt raise JwtError {
   let segments = Array::from_iter(token.split("."))
   guard segments.length() == 3 else {
     raise InvalidToken("a compact JWT must contain exactly three segments")
@@ -172,7 +185,6 @@ pub fn decode_rs256(
     RS256 => ()
     HS256 => raise UnsupportedAlgorithm("HS256")
   }
-  let key = RsaPublicKey::from_pem(public_key_pem)
   let signing_input = segments[0].to_owned() + "." + segments[1].to_owned()
   let signature = decode_base64url(segments[2])
   if !key.verify_sha256(@utf8.encode(signing_input), signature) {

@@ -1,1 +1,6 @@
 // OpenID Connect extensions: discovery, ID Token validation, JWKS.
+
+import {
+  "hc155-89/moonjwt/core",
+  "moonbitlang/core/json",
+}
