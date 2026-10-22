@@ -16,8 +16,8 @@
 | 项目 | 内容 |
 | --- | --- |
 | 项目名称 | moonjwt |
-| 参赛者 | hc155-89 |
-| 联系方式 | GitHub Issues（<https://github.com/hc155-89/moonjwt/issues>） |
+| 参赛者 | 黄才 |
+| 联系方式 | 1558929138@qq.com |
 | GitHub 仓库 | <https://github.com/hc155-89/moonjwt> |
 | 项目方向 | 身份认证基础库 / JWT、OAuth2、OpenID Connect |
 | 是否为移植项目 | 否，原创项目 |
