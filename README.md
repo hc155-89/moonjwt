@@ -157,7 +157,7 @@ moonjwt 0.1.0 - pure MoonBit JWT + OAuth2/OIDC toolkit
 
 | 依赖 | 版本要求 | 说明 |
 | --- | --- | --- |
-| MoonBit 工具链 | 支持现行 `moon.mod` / `moon.pkg` 格式的版本 | 项目以 MoonBit 为唯一实现语言 |
+| MoonBit 工具链 | `moonc` ≥ 0.10.16 | 项目以 MoonBit 为唯一实现语言；0.10.16 为本地实测版本 |
 | 编译器后端 | Wasm / WASI | 纯逻辑实现，无需 gcc、Node.js 或系统加密库 |
 
 安装 MoonBit 工具链（Linux / macOS）：
@@ -200,11 +200,14 @@ HS256 令牌、RFC 7636 附录 B 的 PKCE 向量，以及 OpenSSL 生成的 RS25
 
 ### 5.5 作为依赖安装
 
+本模块目前**尚未发布到 mooncakes.io**，`moon add` 暂时不可用；发布后的安装命令为：
+
 ```bash
 moon add hc155-89/moonjwt
 ```
 
-在 `moon.pkg` 中声明依赖：
+发布之前，请通过 `git clone` 获取源码，并在仓库内运行示例与测试（见 5.2–5.4）。
+发布之后，在 `moon.pkg` 中按如下方式声明依赖：
 
 ```moonbit
 import {
