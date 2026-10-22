@@ -2,5 +2,6 @@
 
 import {
   "hc155-89/moonjwt/core",
+  "moonbitlang/core/encoding/base64",
   "moonbitlang/core/encoding/utf8",
 }

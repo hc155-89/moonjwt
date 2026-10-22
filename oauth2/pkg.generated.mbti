@@ -44,12 +44,15 @@ pub struct OAuth2Config {
   redirect_uri : String
   scopes : Array[String]
 }
+pub fn OAuth2Config::authorization_code_request(Self, StringView, pkce? : Pkce) -> TokenRequest raise OAuth2Error
 pub fn OAuth2Config::authorization_endpoint(Self) -> String
 pub fn OAuth2Config::authorization_url(Self, AuthCodeOptions) -> String
+pub fn OAuth2Config::client_credentials_request(Self) -> TokenRequest raise OAuth2Error
 pub fn OAuth2Config::client_id(Self) -> String
 pub fn OAuth2Config::client_secret(Self) -> String?
 pub fn OAuth2Config::new(StringView, StringView, StringView, StringView) -> Self raise OAuth2Error
 pub fn OAuth2Config::redirect_uri(Self) -> String
+pub fn OAuth2Config::refresh_token_request(Self, StringView) -> TokenRequest raise OAuth2Error
 pub fn OAuth2Config::scopes(Self) -> Array[String]
 pub fn OAuth2Config::token_endpoint(Self) -> String
 pub fn OAuth2Config::with_client_secret(Self, StringView) -> Self raise OAuth2Error
@@ -86,6 +89,18 @@ pub fn Token::id_token(Self) -> String?
 pub fn Token::refresh_token(Self) -> String?
 pub fn Token::scope(Self) -> String?
 pub fn Token::token_type(Self) -> String
+
+pub struct TokenRequest {
+  url : String
+  http_method : String
+  headers : Array[(String, String)]
+  body : String
+}
+pub fn TokenRequest::body(Self) -> String
+pub fn TokenRequest::header(Self, String) -> String?
+pub fn TokenRequest::headers(Self) -> Array[(String, String)]
+pub fn TokenRequest::http_method(Self) -> String
+pub fn TokenRequest::url(Self) -> String
 
 // Type aliases
 
